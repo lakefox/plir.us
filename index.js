@@ -91,7 +91,8 @@ var speed = 50;
 var size = 100;
 var color = '#'+Math.floor(Math.random()*16777215).toString(16);
 var players = [];
-var room = (Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)).toString();
+var room = (Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+Math.floor(Math.random()*10));
+room = room.toString();
 document.querySelector("#link").innerHTML = "http://plir.us/#"+room;
 document.querySelector("#link").href = document.querySelector("#link").innerHTML.slice(15);
 
