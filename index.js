@@ -181,12 +181,12 @@ function removeScreen() {
 }
 
 function pwf() {
-  room = document.querySelector("#link").innerHTML.slice(16);
   removeScreen();
 }
 
 function pn() {
   room = Math.floor(Math.random()*50).toString();
   window.location.href = "#"+room;
+  window.location.reload();
   removeScreen();
 }
