@@ -92,7 +92,7 @@ var size = 100;
 var color = '#'+Math.floor(Math.random()*16777215).toString(16);
 var players = [];
 var room = "plir";
-document.querySelector("#link").innerHTML = "http://plir.io/#"+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+Math.floor(Math.random()*10);
+document.querySelector("#link").innerHTML = "http://plir.us/#"+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+Math.floor(Math.random()*10);
 document.querySelector("#link").href = document.querySelector("#link").innerHTML.slice(15);
 
 if (window.location.hash != "") {
