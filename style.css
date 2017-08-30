@@ -1,9 +1,11 @@
 html, body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
   overflow: hidden;
   width: 5230px;
+}
+* {
+  font-family: 'Baloo Tammudu', cursive;
 }
 #canvas {
   border: none;
@@ -57,7 +59,7 @@ html, body {
 #share {
   text-align: center;
   color: rgb(70,70,70);
-  margin-top: 35px;
+  margin-top: -50px;
 }
 #link {
   border-radius: 5px;
@@ -66,12 +68,13 @@ html, body {
 }
 #pn {
   margin-top: 15px;
-  background: rgb(70,70,70);
+  background: rgba(255, 66, 66, 1);
   width: 110px;
   height: 28px;
   color: #fff;
   border: none;
   border-radius: 5px;
+  font-size: 15px;
 }
 #bg {
   background: rgba(255,255,255,0.4);
@@ -113,4 +116,16 @@ html, body {
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
+}
+#pa {
+  position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 66, 66, 1);
+    border: none;
+    color: #fff;
+    width: 100px;
+    height: 30px;
+    font-size: 16px;
 }

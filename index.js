@@ -31,7 +31,7 @@ function drawSquare(x, y, color) {
     }
     if (won()) {
       document.querySelector("#results").style.display = "inherit";
-      var keys = Object.keys(s).slice(0,10);
+      var keys = Object.keys(s).slice(0,5);
       for (var i = 0; i < keys.length; i++) {
         var key = keys[i];
         document.querySelector("#final-scores").innerHTML += '<div style="background: '+key+'" class="c">'+s[key]+'</div>';
@@ -190,7 +190,7 @@ function pwf() {
 }
 
 function pn() {
-  room = Math.floor(Math.random()*50).toString();
+  room = Math.floor(Math.random()*20).toString();
   window.location.href = "#"+room;
   window.location.reload();
   removeScreen();
