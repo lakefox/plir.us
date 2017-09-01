@@ -230,7 +230,7 @@ function bot() {
       x = Math.min(Math.max((Math.floor(Math.random()*3)-1)+x,0),49);
       y = Math.min(Math.max((Math.floor(Math.random()*3)-1)+y,0),49);
       drawSquare(x,y,botColor);
-    },270);
+    },150);
   } else {
     console.log("taken");
     bot();
