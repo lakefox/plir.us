@@ -17,7 +17,7 @@ function drawMap(width, height, size) {
 }
 
 function drawSquare(x, y, color) {
-  if (!mapData[x][y] || mapcomp() >= 80) {
+  if (!mapData[x][y] || mapcomp() >= 80 && !won()) {
     mapData[x][y] = color;
     ctx.fillStyle = color;
     ctx.fillRect(x*size, y*size, size, size);
