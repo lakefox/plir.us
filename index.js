@@ -210,7 +210,7 @@ function pwf() {
 }
 
 function pn() {
-  startBots(4);
+  startBots(5);
   removeScreen();
 }
 
@@ -227,9 +227,9 @@ function bot() {
   if (mapData[x][y] == undefined) {
     drawSquare(x,y,botColor)
     setInterval(() => {
-      var nx = Math.floor(Math.random()*50-x)+x;
-      var ny = Math.floor(Math.random()*50-y)+y;
-      drawSquare(nx,ny,botColor);
+      x = Math.min(Math.max((Math.floor(Math.random()*3)-1)+x,0),49);
+      y = Math.min(Math.max((Math.floor(Math.random()*3)-1)+y,0),49);
+      drawSquare(x,y,botColor);
     },270);
   } else {
     console.log("taken");
