@@ -17,27 +17,30 @@ function drawMap(width, height, size) {
 }
 
 function drawSquare(x, y, color) {
-  mapData[x][y] = color;
-  ctx.fillStyle = color;
-  ctx.fillRect(x*size, y*size, size, size);
-  drawMiniMap(205, (img)=>{
-	  document.querySelector("#img").innerHTML = "";
-    document.querySelector("#img").appendChild(img);
-    document.querySelector("#scores").innerHTML = "";
-    var s = stats();
-    for (var i = 0; i < Object.keys(s).length; i++) {
-      var key = Object.keys(s)[i];
-      document.querySelector("#scores").innerHTML += '<div style="background: '+key+'" class="c">'+s[key]+'</div>';
-    }
-    if (won()) {
-      document.querySelector("#results").style.display = "inherit";
-      var keys = Object.keys(s).slice(0,5);
-      for (var i = 0; i < keys.length; i++) {
-        var key = keys[i];
-        document.querySelector("#final-scores").innerHTML += '<div style="background: '+key+'" class="c">'+s[key]+'</div>';
+  if (!mapData[x][y] || mapcomp() >= 80) {
+    mapData[x][y] = color;
+    ctx.fillStyle = color;
+    ctx.fillRect(x*size, y*size, size, size);
+    drawMiniMap(205, (img)=>{
+  	  document.querySelector("#img").innerHTML = "";
+      document.querySelector("#img").appendChild(img);
+      document.querySelector("#scores").innerHTML = "";
+      var s = stats();
+      for (var i = 0; i < Object.keys(s).length; i++) {
+        var key = Object.keys(s)[i];
+        document.querySelector("#scores").innerHTML += '<div style="background: '+key+'" class="c">'+s[key]+'</div>';
       }
-    }
-  });
+      if (won()) {
+        document.querySelector("#results").style.display = "inherit";
+        var keys = Object.keys(s).slice(0,5);
+        document.querySelector("#final-scores").innerHTML = "";
+        for (var i = 0; i < keys.length; i++) {
+          var key = keys[i];
+          document.querySelector("#final-scores").innerHTML += '<div style="background: '+key+'" class="c">'+s[key]+'</div>';
+        }
+      }
+    });
+  }
 }
 
 function drawMiniMap(size, cb) {
@@ -92,9 +95,26 @@ function won() {
   return true;
 }
 
+function mapcomp() {
+  var s = stats();
+  var p = 0;
+  for (var i = 0; i < Object.values(s).length; i++) {
+    p += Object.values(s)[i];
+  }
+  return (p/2500)*100;
+}
+
+function newColor() {
+  var c = '#'+Math.floor(Math.random()*16777215).toString(16);
+  while (c.length < 7) {
+    c = '#'+Math.floor(Math.random()*16777215).toString(16);
+  }
+  return c;
+}
+
 var speed = 50;
 var size = 100;
-var color = '#'+Math.floor(Math.random()*16777215).toString(16);
+var color = newColor();
 var players = [];
 var room = "#"+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+Math.floor(Math.random()*10);
 document.querySelector("#link").innerHTML = "http://plir.us/"+room;
@@ -190,8 +210,29 @@ function pwf() {
 }
 
 function pn() {
-  room = Math.floor(Math.random()*20).toString();
-  window.location.href = "#"+room;
-  window.location.reload();
+  startBots(4);
   removeScreen();
+}
+
+function startBots(amt) {
+  for (var i = 0; i < amt; i++) {
+    bot();
+  }
+}
+
+function bot() {
+  var botColor = newColor();
+  var x = Math.floor(Math.random()*50);
+  var y = Math.floor(Math.random()*50);
+  if (mapData[x][y] == undefined) {
+    drawSquare(x,y,botColor)
+    setInterval(() => {
+      var nx = Math.floor(Math.random()*50-x)+x;
+      var ny = Math.floor(Math.random()*50-y)+y;
+      drawSquare(nx,ny,botColor);
+    },270);
+  } else {
+    console.log("taken");
+    bot();
+  }
 }
