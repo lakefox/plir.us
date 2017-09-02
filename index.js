@@ -17,7 +17,7 @@ function drawMap(width, height, size) {
 }
 
 function drawSquare(x, y, color) {
-  if (!mapData[x][y] || mapcomp() >= 90 && !won()) {
+  if (!mapData[x][y] && !won()) {
     mapData[x][y] = color;
     ctx.fillStyle = color;
     ctx.fillRect(x*size, y*size, size, size);
@@ -93,15 +93,6 @@ function won() {
     }
   }
   return true;
-}
-
-function mapcomp() {
-  var s = stats();
-  var p = 0;
-  for (var i = 0; i < Object.values(s).length; i++) {
-    p += Object.values(s)[i];
-  }
-  return (p/2500)*100;
 }
 
 function newColor() {
@@ -227,12 +218,31 @@ function bot() {
   if (mapData[x][y] == undefined) {
     drawSquare(x,y,botColor)
     setInterval(() => {
-      x = Math.min(Math.max((Math.floor(Math.random()*3)-1)+x,0),49);
-      y = Math.min(Math.max((Math.floor(Math.random()*3)-1)+y,0),49);
-      drawSquare(x,y,botColor);
-    },150);
+      var coors = genNewCoors(x,y);
+      x = coors[0];
+      y = coors[1];
+      drawSquare(coors[0],coors[1],botColor);
+    },280);
   } else {
     console.log("taken");
     bot();
+  }
+}
+
+function genNewCoors(baseX, baseY) {
+  var ad = [];
+  for (var xO = -1; xO < 2; xO++) {
+    for (var yO = -1; yO < 2; yO++) {
+      var xF = Math.min(Math.max(xO+baseX,0),49);
+      var yF = Math.min(Math.max(yO+baseY,0),49);
+      if (!mapData[xF][yF]) {
+        ad.push([xF,yF]);
+      }
+    }
+  }
+  if (ad.length == 0) {
+    return [Math.min(Math.max((Math.floor(Math.random()*3)-1)+baseX,0),49), Math.min(Math.max((Math.floor(Math.random()*3)-1)+baseY,0),49)];
+  } else {
+    return ad[Math.floor(Math.random()*ad.length)];
   }
 }
