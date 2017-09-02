@@ -210,21 +210,26 @@ function startBots(amt) {
     bot();
   }
 }
-
+var stop = false;
 function bot(color) {
   var botColor = color || newColor();
   var x = Math.floor(Math.random()*50);
   var y = Math.floor(Math.random()*50);
   if (mapData[x][y] == undefined) {
     drawSquare(x,y,botColor)
-    setInterval(() => {
-      var coors = genNewCoors(x,y);
-      x = coors[0];
-      y = coors[1];
-      drawSquare(coors[0],coors[1],botColor);
-    },300);
+    place();
+    function place() {
+      setTimeout(() => {
+        var coors = genNewCoors(x,y);
+        x = coors[0];
+        y = coors[1];
+        drawSquare(coors[0],coors[1],botColor);
+        if (!stop) {
+          place();
+        }
+      },Math.floor(Math.random()*500));
+    }
   } else {
-    console.log("taken");
     bot();
   }
 }
