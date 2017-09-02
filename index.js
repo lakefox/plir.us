@@ -201,7 +201,7 @@ function pwf() {
 }
 
 function pn() {
-  startBots(5);
+  startBots(9);
   removeScreen();
 }
 
@@ -211,8 +211,8 @@ function startBots(amt) {
   }
 }
 
-function bot() {
-  var botColor = newColor();
+function bot(color) {
+  var botColor = color || newColor();
   var x = Math.floor(Math.random()*50);
   var y = Math.floor(Math.random()*50);
   if (mapData[x][y] == undefined) {
@@ -241,7 +241,15 @@ function genNewCoors(baseX, baseY) {
     }
   }
   if (ad.length == 0) {
-    return [Math.min(Math.max((Math.floor(Math.random()*3)-1)+baseX,0),49), Math.min(Math.max((Math.floor(Math.random()*3)-1)+baseY,0),49)];
+    for (var xO = -5; xO < 6; xO++) {
+      for (var yO = -5; yO < 6; yO++) {
+        var xF = Math.min(Math.max(xO+baseX,0),49);
+        var yF = Math.min(Math.max(yO+baseY,0),49);
+        if (!mapData[xF][yF]) {
+          ad.push([xF,yF]);
+        }
+      }
+    }
   } else {
     return ad[Math.floor(Math.random()*ad.length)];
   }
