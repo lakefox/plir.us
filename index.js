@@ -222,7 +222,7 @@ function bot(color) {
       x = coors[0];
       y = coors[1];
       drawSquare(coors[0],coors[1],botColor);
-    },280);
+    },300);
   } else {
     console.log("taken");
     bot();
@@ -241,14 +241,40 @@ function genNewCoors(baseX, baseY) {
     }
   }
   if (ad.length == 0) {
-    for (var xO = -5; xO < 6; xO++) {
-      for (var yO = -5; yO < 6; yO++) {
+    for (var xO = -15; xO < 16; xO++) {
+      for (var yO = -15; yO < 16; yO++) {
         var xF = Math.min(Math.max(xO+baseX,0),49);
         var yF = Math.min(Math.max(yO+baseY,0),49);
         if (!mapData[xF][yF]) {
-          ad.push([xF,yF]);
+          var dist = Math.sqrt(Math.pow(baseX-xF,2)+Math.pow(baseY-yF,2));
+          ad[dist] = [xF,yF];
         }
       }
+    }
+    if (ad.length > 0) {
+      for (var i = 0; i < ad.length; i++) {
+        var coor = ad[i];
+        if (coor) {
+          if (coor[0]-baseX < 0) {
+            var x = baseX-1;
+          } else if (coor[0]-baseX == 0) {
+            var x = baseX;
+          } else {
+            var x = baseX+1;
+          }
+          if (coor[1]-baseY < 0) {
+            var y = baseY-1;
+          } else if (coor[1]-baseY == 0) {
+            var y = baseY;
+          } else {
+            var y = baseY+1;
+          }
+          return [Math.min(Math.max(x,0),49),Math.min(Math.max(y,0),49)];
+          break;
+        }
+      }
+    } else {
+      return [Math.min(Math.max(Math.floor((Math.random()*3)-1)+baseX,0),49),Math.min(Math.max(Math.floor((Math.random()*3)-1)+baseY,0),49)];
     }
   } else {
     return ad[Math.floor(Math.random()*ad.length)];
