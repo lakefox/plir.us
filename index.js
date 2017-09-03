@@ -227,7 +227,7 @@ function bot(color) {
         if (!stop) {
           place();
         }
-      },Math.floor(Math.random()*500));
+      },Math.floor(Math.random()*300)+200);
     }
   } else {
     bot();
