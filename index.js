@@ -40,6 +40,8 @@ function drawSquare(x, y, color) {
         }
       }
     });
+  } else if (won()) {
+    stop = true;
   }
 }
 
@@ -144,18 +146,14 @@ var fx = new fox("game", room, (raw)=>{
 
 var lastUser = undefined;
 fx.addUser = (id)=>{
-  console.log(id)
   if (!lastUser) {
     lastUser = id;
-    console.log("sending")
     fx.msg(JSON.stringify(mapData));
   }
 }
 
 fx.removeUser = (id)=>{
-  console.log(id);
   if (id == lastUser) {
-    console.log("romoving");
     lastUser = undefined;
   }
 }
