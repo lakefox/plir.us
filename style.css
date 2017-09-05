@@ -114,26 +114,28 @@ html, body {
   margin-top: 35px;
 }
 #final-scores {
-  width: 200px;
+  width: 170px;
   position: fixed;
+  top: 170px;
   left: 50%;
   transform: translateX(-50%);
 }
 #pa {
   position: fixed;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(255, 66, 66, 1);
-    border: none;
-    color: #fff;
-    width: 100px;
-    height: 30px;
-    font-size: 16px;
+  bottom: 130px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 66, 66, 1);
+  border: none;
+  color: #fff;
+  width: 100px;
+  height: 30px;
+  font-size: 16px;
 }
 #ad {
+  position: fixed;
   margin-left: 16px;
-  margin-top: 162px;
+  bottom: 16px;
 }
 #af {
   position: fixed;
