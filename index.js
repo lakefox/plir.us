@@ -32,6 +32,7 @@ function drawSquare(x, y, color) {
       }
       if (won()) {
         document.querySelector("#results").style.display = "inherit";
+        document.querySelector("#af").style.display = "inherit";
         var keys = Object.keys(s).slice(0,5);
         document.querySelector("#final-scores").innerHTML = "";
         for (var i = 0; i < keys.length; i++) {
@@ -192,6 +193,7 @@ function removeScreen() {
   document.querySelector("#bg").style.display = "none";
   document.querySelector("body").style.overflow = "inherit";
   document.querySelector("html").style.overflow = "inherit";
+  document.querySelector("#af").style.display = "none";
 }
 
 function pwf() {
