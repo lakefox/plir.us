@@ -129,7 +129,7 @@ for (var x = 0; x < 50; x++) {
 
 drawMap(5000,5000,100);
 
-var fx = new fox("game", room, (raw)=>{
+var fx = new fox("plirus", room, (raw)=>{
   var data = JSON.parse(raw);
   if (raw[0] == "[") {
     mapData = data;
