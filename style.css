@@ -9,6 +9,7 @@ html, body {
 }
 #canvas {
   border: none;
+  background-color: #fff;
 }
 #leaderboard {
   width: 225px;
