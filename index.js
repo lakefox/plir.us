@@ -1,9 +1,9 @@
 window.onload = () => {
   window.scrollTo(0,0);
 }
-function load(query,type) {
+function load(type) {
   var res = [];
-  fetch("https://api.pushshift.io/reddit/search/submission/?subreddit=forhire&filter=link_flair_text,created_utc,title,author,selftext&sort=desc&size=500&q="+encodeURIComponent(query)).then((raw) => {
+  fetch("https://api.pushshift.io/reddit/search/submission/?subreddit=forhire&filter=link_flair_text,created_utc,title,author,selftext&sort=desc&size=500").then((raw) => {
     return raw.json();
   }).then((data) => {
     var posts = data.data;
@@ -11,6 +11,9 @@ function load(query,type) {
       var post = posts[i];
       if (post.author != "[deleted]" && post.selftext != "[removed]" && post.link_flair_text) {
         post.title = post.title.split(" ").slice(1).join(" ");
+        if (post.link_flair_text == "For Hire") {
+          post.title = post.title.slice(5);
+        }
         post.created_utc = time(post.created_utc);
         if (post.link_flair_text == type) {
           res.push(post);
@@ -30,15 +33,9 @@ function time(UNIX_timestamp){
   return time;
 }
 function b(e) {
-  document.querySelector(".tags").innerHTML = "";
-  var s = document.querySelector("#search").value.split(" ").filter(tag => tag != "");
-  var type = e.innerHTML;
-  var query = s.join("+");
   document.querySelector("html").style.overflowY = "inherit";
-  for (var i = 0; i < s.length; i++) {
-    document.querySelector(".tags").innerHTML += '<div class="tag">'+s[i]+'</div>';
-  }
-  load(query, type);
+  var type = e.innerHTML;
+  load(type);
 }
 function draw(posts) {
   document.querySelector(".posts").innerHTML = "";
