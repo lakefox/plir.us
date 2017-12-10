@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Bungee+Shade|Roboto+Slab:700|Oswald|Slabo+27px');
+@import url('https://fonts.googleapis.com/css?family=Bungee+Shade|Roboto+Slab:700|Oswald|Slabo+27px|Ubuntu');
 html, body {
   margin: 0;
   padding: 0;
@@ -19,8 +19,10 @@ html, body {
 }
 .subtitle {
   font-size: 25px;
-  font-family: 'Slabo 27px', serif;
-  color: #111;
+  font-family: 'Ubuntu', sans-serif;
+  color: #222;
+  border: 5px solid #111;
+  padding-left: 10px;
 }
 .page {
   width: 100vw;
