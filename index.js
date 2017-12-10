@@ -1,287 +1,78 @@
-var canvas = document.querySelector("canvas");
-var ctx = canvas.getContext("2d");
-
-function drawMap(width, height, size) {
-  var w = Math.floor(width/size);
-  var h = Math.floor(height/size);
-  ctx.beginPath();
-  for (var x = 0; x < w; x++) {
-    ctx.moveTo(x*size, 0);
-    ctx.lineTo(x*size, height);
-  }
-  for (var y = 0; y < w; y++) {
-    ctx.moveTo(0, y*size);
-    ctx.lineTo(width, y*size);
-  }
-  ctx.stroke();
+window.onload = () => {
+  window.scrollTo(0,0);
 }
-
-function drawSquare(x, y, color) {
-  if (!mapData[x][y] && !won()) {
-    mapData[x][y] = color;
-    ctx.fillStyle = color;
-    ctx.fillRect(x*size, y*size, size, size);
-    drawMiniMap(205, (img)=>{
-  	  document.querySelector("#img").innerHTML = "";
-      document.querySelector("#img").appendChild(img);
-      document.querySelector("#scores").innerHTML = "";
-      var s = stats();
-      for (var i = 0; i < Object.keys(s).length; i++) {
-        var key = Object.keys(s)[i];
-        document.querySelector("#scores").innerHTML += '<div style="background: '+key+'" class="c">'+s[key]+'</div>';
-      }
-      if (won()) {
-        document.querySelector("#results").style.display = "inherit";
-        document.querySelector("#af").style.display = "inherit";
-        var keys = Object.keys(s).slice(0,5);
-        document.querySelector("#final-scores").innerHTML = "";
-        for (var i = 0; i < keys.length; i++) {
-          var key = keys[i];
-          document.querySelector("#final-scores").innerHTML += '<div style="background: '+key+'" class="c">'+s[key]+'</div>';
+function load(query,type) {
+  var res = [];
+  fetch("https://api.pushshift.io/reddit/search/submission/?subreddit=forhire&filter=link_flair_text,created_utc,title,author,selftext&sort=desc&size=500&q="+encodeURIComponent(query)).then((raw) => {
+    return raw.json();
+  }).then((data) => {
+    var posts = data.data;
+    for (var i = 0; i < posts.length; i++) {
+      var post = posts[i];
+      if (post.author != "[deleted]" && post.selftext != "[removed]" && post.link_flair_text) {
+        post.title = post.title.split(" ").slice(1).join(" ");
+        post.created_utc = time(post.created_utc);
+        if (post.link_flair_text == type) {
+          res.push(post);
         }
       }
-    });
-  } else if (won()) {
-    stop = true;
-  }
-}
-
-function drawMiniMap(size, cb) {
-  var c = document.createElement("canvas");
-  c.width = size;
-  c.height = size;
-  var s = size/50;
-  var ct = c.getContext("2d");
-  for (var x = 0; x < 50; x++) {
-    for (var y = 0; y < 50; y++) {
-      if (mapData[x][y]) {
-        ct.fillStyle = mapData[x][y];
-        ct.fillRect(x*s, y*s, s, s);
-      }
     }
-  }
-  cb(c);
-}
-
-function stats() {
-  var mapStats = {};
-  for (var x = 0; x < 50; x++) {
-    for (var y = 0; y < 50; y++) {
-      if (mapData[x][y]) {
-        if (!mapStats[mapData[x][y]]) mapStats[mapData[x][y]] = 0;
-        mapStats[mapData[x][y]] += 1;
-      }
-    }
-  }
-  var sort = [];
-  for (var color in mapStats) {
-    sort.push([color, mapStats[color]]);
-  }
-  sort.sort(function(a, b) {
-    return b[1] - a[1];
+    draw(res);
   });
-  var obj = {};
-  for (var i = 0; i < sort.length; i++) {
-    obj[sort[i][0]] = sort[i][1];
-  }
-  return obj;
 }
-
-function won() {
-  for (var x = 0; x < 50; x++) {
-    for (var y = 0; y < 50; y++) {
-      if (!mapData[x][y]) {
-        return false;
-      }
+function time(UNIX_timestamp){
+  var a = new Date(UNIX_timestamp * 1000);
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var year = a.getFullYear();
+  var month = months[a.getMonth()];
+  var date = a.getDate();
+  var time = month+' ' + date + ',' + year;
+  return time;
+}
+function b(e) {
+  document.querySelector(".tags").innerHTML = "";
+  var s = document.querySelector("#search").value.split(" ").filter(tag => tag != "");
+  var type = e.innerHTML;
+  var query = s.join("+");
+  document.querySelector("html").style.overflowY = "inherit";
+  for (var i = 0; i < s.length; i++) {
+    document.querySelector(".tags").innerHTML += '<div class="tag">'+s[i]+'</div>';
+  }
+  load(query, type);
+}
+function draw(posts) {
+  document.querySelector(".posts").innerHTML = "";
+  for (var i = 0; i < posts.length; i++) {
+    document.querySelector(".posts").innerHTML += "<div class='post' onclick='show("+i.toString()+")'>"+posts[i].title+" -&nbsp;"+posts[i].created_utc.replace(/ /g, "&nbsp;")+"</div>";
+    if (i%10 == 9) {
+      document.querySelector(".posts").innerHTML += "<iframe class='post' data-aa='770844' src='//acceptable.a-ads.com/770844' scrolling='no' style='border:0px; padding:0;overflow:hidden' allowtransparency='true'></iframe>";
     }
   }
-  return true;
+  window.posts = posts;
 }
-
-function newColor() {
-  var c = '#'+Math.floor(Math.random()*16777215).toString(16);
-  while (c.length < 7) {
-    c = '#'+Math.floor(Math.random()*16777215).toString(16);
-  }
-  return c;
+function show(index) {
+  window.index = index;
+  var post = window.posts[index];
+  var converter = new showdown.Converter();
+  var html = converter.makeHtml(post.selftext);
+  document.querySelector(".viewTitle").innerHTML = post.title;
+  document.querySelector(".viewBody").innerHTML = html;
+  document.querySelector(".view").style.display = "inherit";
+  window.y = window.scrollY;
+  window.scrollTo(0,0);
+  document.querySelector(".page").style.display = "none";
 }
-
-var speed = 50;
-var size = 100;
-var color = newColor();
-var players = [];
-var room = "#"+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+Math.floor(Math.random()*10);
-document.querySelector("#link").innerHTML = "http://plir.us/"+room;
-document.querySelector("#link").href = document.querySelector("#link").innerHTML.slice(15);
-
-if (window.location.hash != "") {
-  room = window.location.hash;
-  window.onload = removeScreen;
+function hide() {
+  document.querySelector(".view").style.display = "none";
+  document.querySelector(".page").style.display = "inherit";
+  window.scrollTo(0,window.y);
 }
-
-var mapData = [];
-for (var x = 0; x < 50; x++) {
-  mapData[x] = [];
-  for (var y = 0; y < 50; y++) {
-    mapData[x][y] = undefined;
-  }
-}
-
-drawMap(5000,5000,100);
-
-var fx = new fox("plirus", room, (raw)=>{
-  var data = JSON.parse(raw);
-  if (raw[0] == "[") {
-    mapData = data;
-    for (var x = 0; x < mapData.length; x++) {
-      for (var y = 0; y < mapData[0].length; y++) {
-        if (mapData[x][y] != null) {
-          drawSquare(x, y, mapData[x][y]);
-        }
-      }
-    }
-  } else if (data.type == "cmd") {
-    drawSquare(data.x, data.y, data.color);
-  }
-});
-
-var lastUser = undefined;
-fx.addUser = (id)=>{
-  if (!lastUser) {
-    lastUser = id;
-    fx.msg(JSON.stringify(mapData));
-  }
-}
-
-fx.removeUser = (id)=>{
-  if (id == lastUser) {
-    lastUser = undefined;
-  }
-}
-
-// Controls
-var map = {};
-onkeydown = onkeyup = (e)=>{
-    e = e || event;
-    map[e.keyCode] = e.type == "keydown";
-    var x = 0;
-    var y = 0;
-    // Up
-    if (map[87]) {
-      y -= speed;
-    }
-    if (map[65]) {
-      x -= speed;
-    }
-    if (map[83]) {
-      y += speed;
-    }
-    if (map[68]) {
-      x += speed;
-    }
-    window.scrollBy(x, y);
-}
-
-document.querySelector("#canvas").addEventListener("click", (e)=> {
-  var x = Math.floor(e.pageX/size);
-  var y = Math.floor(e.pageY/size);
-  drawSquare(x,y,color)
-  fx.msg(JSON.stringify({type:"cmd",x:x,y:y,color:color}));
-});
-
-function removeScreen() {
-  document.querySelector("#bg").style.display = "none";
-  document.querySelector("body").style.overflow = "inherit";
-  document.querySelector("html").style.overflow = "inherit";
-  document.querySelector("#af").style.display = "none";
-}
-
-function pwf() {
-  removeScreen();
-}
-
-function pn() {
-  startBots(9);
-  removeScreen();
-}
-
-function startBots(amt) {
-  for (var i = 0; i < amt; i++) {
-    bot();
-  }
-}
-var stop = false;
-function bot(color) {
-  var botColor = color || newColor();
-  var x = Math.floor(Math.random()*50);
-  var y = Math.floor(Math.random()*50);
-  if (mapData[x][y] == undefined) {
-    drawSquare(x,y,botColor)
-    place();
-    function place() {
-      setTimeout(() => {
-        var coors = genNewCoors(x,y);
-        x = coors[0];
-        y = coors[1];
-        drawSquare(coors[0],coors[1],botColor);
-        if (!stop) {
-          place();
-        }
-      },Math.floor(Math.random()*400)+100);
-    }
-  } else {
-    bot();
-  }
-}
-
-function genNewCoors(baseX, baseY) {
-  var ad = [];
-  for (var xO = -1; xO < 2; xO++) {
-    for (var yO = -1; yO < 2; yO++) {
-      var xF = Math.min(Math.max(xO+baseX,0),49);
-      var yF = Math.min(Math.max(yO+baseY,0),49);
-      if (!mapData[xF][yF]) {
-        ad.push([xF,yF]);
-      }
-    }
-  }
-  if (ad.length == 0) {
-    for (var xO = -15; xO < 16; xO++) {
-      for (var yO = -15; yO < 16; yO++) {
-        var xF = Math.min(Math.max(xO+baseX,0),49);
-        var yF = Math.min(Math.max(yO+baseY,0),49);
-        if (!mapData[xF][yF]) {
-          var dist = Math.sqrt(Math.pow(baseX-xF,2)+Math.pow(baseY-yF,2));
-          ad[dist] = [xF,yF];
-        }
-      }
-    }
-    if (ad.length > 0) {
-      for (var i = 0; i < ad.length; i++) {
-        var coor = ad[i];
-        if (coor) {
-          if (coor[0]-baseX < 0) {
-            var x = baseX-1;
-          } else if (coor[0]-baseX == 0) {
-            var x = baseX;
-          } else {
-            var x = baseX+1;
-          }
-          if (coor[1]-baseY < 0) {
-            var y = baseY-1;
-          } else if (coor[1]-baseY == 0) {
-            var y = baseY;
-          } else {
-            var y = baseY+1;
-          }
-          return [Math.min(Math.max(x,0),49),Math.min(Math.max(y,0),49)];
-          break;
-        }
-      }
-    } else {
-      return [Math.min(Math.max(Math.floor((Math.random()*3)-1)+baseX,0),49),Math.min(Math.max(Math.floor((Math.random()*3)-1)+baseY,0),49)];
-    }
-  } else {
-    return ad[Math.floor(Math.random()*ad.length)];
-  }
+function message() {
+  var post = window.posts[window.index];
+  var a = document.createElement("a");
+  a.target = "_blank";
+  a.href = "https://www.reddit.com/message/compose/?to="+post.author+"&subject="+post.title;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
 }

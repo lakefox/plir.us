@@ -2,50 +2,31 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Plir.us</title>
-    <link rel="stylesheet" href="./style.css">
-    <link href="https://fonts.googleapis.com/css?family=Baloo+Tammudu" rel="stylesheet">
-    <link rel="icon" type="image/png" sizes="180x180" href="./apple-touch-icon.png">
+    <title>PLIRUS</title>
+    <link rel="stylesheet" href="./master.css">
   </head>
   <body>
-    <div id="leaderboard">
-      <div id="title">
-        Leader Board
+    <div class="body">
+      <div class="title">
+        PLIRUS
       </div>
-      <div id="scores">
-      </div>
-      <div id="img"></div>
-    </div>
-    <div id="bg">
-      <div id="play">
-        <div id="plir">
-          Plirus
-        </div>
-        <div id="share">
-          Share this link to play with friends <br>
-          <a id="link" href="#83763" onclick="pwf()">http://plir.us/#83763</a> <br>
-          or <br>
-          <button id="pn" onclick="pn()">
-            Play Now
-          </button>
-        </div>
-        <iframe id="ad" data-aa='642279' src='//ad.a-ads.com/642279?size=468x60' scrolling='no' style='width:468px; height:60px; border:0px; padding:0;overflow:hidden' allowtransparency='true'></iframe>
+      <div class="controls">
+        <input type="text" id="search" placeholder="Find Some One...">
+        <button type="button" class="button b1" onclick="b(this)">For Hire</button>
+        <button type="button" class="button b2" onclick="b(this)">Hiring</button>
       </div>
     </div>
-    <a id="af" href="http://io-games.io">online io games
-      <!-- <iframe id="IOG_CP" scrolling="no" frameborder="0" width="200"  height="145" src="https://viral.iogames.space/cp/plirus"style="border-radius:10px;-webkit-box-shadow:0 3px 6px rgba(0,0,0,.25),0 3px 6px rgba(0,0,0,.4);-moz-box-shadow:0 3px 6px rgba(0,0,0,.25),0 3px 6px rgba(0,0,0,.4);box-shadow:0 3px 6px rgba(0,0,0,.25),0 3px 6px rgba(0,0,0,.4);"></iframe> -->
-    </a>
-    <div id="results">
-      <div id="results-title">
-        Results
-      </div>
-      <div id="final-scores">
-      </div>
-      <button id="pa" onclick="window.location.href = window.location.origin">Play Again!</button>
-      <iframe id="ad" data-aa='645338' src='//ad.a-ads.com/645338?size=468x60' scrolling='no' style='width:468px; height:60px; border:0px; padding:0;overflow:hidden' allowtransparency='true'></iframe>
+    <div class="page">
+      <div class="tags"></div>
+      <div class="posts"></div>
     </div>
-    <canvas id="canvas" width="5000px" height="5000px"></canvas>
-    <script src="https://rawgit.com/lakefox/Fox/master/fox.min.js"></script>
-    <script type="text/javascript" src="index.js"></script>
+    <div class="view">
+      <div class="viewTitle"></div>
+      <div class="viewBody"></div>
+      <button type="button" id="contact" class="button" onclick="message()">Message</button>
+      <button type="button" id="exit" class="button" onclick="hide()">Done</button>
+    </div>
+    <script src="./showdown.min.js" charset="utf-8"></script>
+    <script src="./index.js" charset="utf-8"></script>
   </body>
 </html>
