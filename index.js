@@ -65,7 +65,7 @@ function show(index) {
   var converter = new showdown.Converter();
   var html = converter.makeHtml(post.selftext);
   document.querySelector(".viewTitle").innerHTML = post.title;
-  document.querySelector(".viewBody").innerHTML = html + "<a href='http://plir.us/#"+post.id+"'>Share</a>";
+  document.querySelector(".viewBody").innerHTML = html + "<a target='_blank' href='http://plir.us/#"+post.id+"'>Share</a>";
   document.querySelector(".view").style.display = "inherit";
   window.y = window.scrollY;
   window.scrollTo(0,0);
