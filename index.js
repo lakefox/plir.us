@@ -1,38 +1,37 @@
 window.onload = () => {
   window.scrollTo(0,0);
-  if (window.location.hash.length > 1) {
-    loadPost(window.location.hash);
-  }
-}
-function loadPost(id) {
-  console.log(id);
-  fetch("https://reddit.com/"+id.slice(1)+".json").then((raw) => {
-    return raw.json();
-  }).then((data) => {
-    console.log(data);
-  });
-}
-function load(type) {
-  var res = [];
-  fetch("https://api.pushshift.io/reddit/search/submission/?subreddit=forhire&filter=link_flair_text,created_utc,title,author,id,selftext&sort=desc&size=500").then((raw) => {
-    return raw.json();
-  }).then((data) => {
-    var posts = data.data;
-    for (var i = 0; i < posts.length; i++) {
-      var post = posts[i];
-      if (post.author != "[deleted]" && post.selftext != "[removed]" && post.link_flair_text) {
-        post.title = post.title.split(" ").slice(1).join(" ");
-        if (post.link_flair_text == "For Hire") {
-          post.title = post.title.slice(5);
-        }
-        post.created_utc = time(post.created_utc);
-        if (post.link_flair_text == type) {
-          res.push(post);
+  load(() => {
+    if (window.location.hash.length > 1) {
+      for (var i = 0; i < window.posts.length; i++) {
+        if (window.posts[i].id == window.location.hash.slice(1)) {
+          show(i);
         }
       }
     }
-    draw(res);
   });
+}
+function load(cb) {
+  if (!window.posts) {
+    var res = [];
+    fetch("https://api.pushshift.io/reddit/search/submission/?subreddit=forhire&filter=link_flair_text,created_utc,title,author,id,selftext&sort=desc&size=500").then((raw) => {
+      return raw.json();
+    }).then((data) => {
+      var posts = data.data;
+      for (var i = 0; i < posts.length; i++) {
+        var post = posts[i];
+        if (post.author != "[deleted]" && post.selftext != "[removed]" && post.link_flair_text) {
+          post.title = post.title.split(" ").slice(1).join(" ");
+          if (post.link_flair_text == "For Hire") {
+            post.title = post.title.slice(5);
+          }
+          post.created_utc = time(post.created_utc);
+          res.push(post);
+        }
+      }
+      window.posts = res;
+      cb();
+    });
+  }
 }
 function time(UNIX_timestamp){
   var a = new Date(UNIX_timestamp * 1000);
@@ -46,17 +45,19 @@ function time(UNIX_timestamp){
 function b(e) {
   document.querySelector("html").style.overflowY = "inherit";
   var type = e.innerHTML;
-  load(type);
+  draw(type);
 }
-function draw(posts) {
+function draw(type) {
   document.querySelector(".posts").innerHTML = "";
+  var posts = window.posts;
   for (var i = 0; i < posts.length; i++) {
-    document.querySelector(".posts").innerHTML += "<div class='post' onclick='show("+i.toString()+")'>"+posts[i].title+" -&nbsp;"+posts[i].created_utc.replace(/ /g, "&nbsp;")+"</div>";
-    if (i%10 == 9) {
-      document.querySelector(".posts").innerHTML += "<iframe class='post' data-aa='770844' src='//acceptable.a-ads.com/770844' scrolling='no' style='border:0px; padding:0;overflow:hidden' allowtransparency='true'></iframe>";
+    if (posts[i].link_flair_text == type) {
+      document.querySelector(".posts").innerHTML += "<div class='post' onclick='show("+i.toString()+")'>"+posts[i].title+" -&nbsp;"+posts[i].created_utc.replace(/ /g, "&nbsp;")+"</div>";
+      if (i%10 == 9) {
+        document.querySelector(".posts").innerHTML += "<iframe class='post' data-aa='770844' src='//acceptable.a-ads.com/770844' scrolling='no' style='border:0px; padding:0;overflow:hidden' allowtransparency='true'></iframe>";
+      }
     }
   }
-  window.posts = posts;
 }
 function show(index) {
   window.index = index;
@@ -64,7 +65,7 @@ function show(index) {
   var converter = new showdown.Converter();
   var html = converter.makeHtml(post.selftext);
   document.querySelector(".viewTitle").innerHTML = post.title;
-  document.querySelector(".viewBody").innerHTML = html;
+  document.querySelector(".viewBody").innerHTML = html + "<a href='http://plir.us/#"+post.id+"'>Share</a>";
   document.querySelector(".view").style.display = "inherit";
   window.y = window.scrollY;
   window.scrollTo(0,0);
