@@ -1,9 +1,20 @@
 window.onload = () => {
   window.scrollTo(0,0);
+  if (window.location.hash.length > 1) {
+    loadPost(window.location.hash);
+  }
+}
+function loadPost(id) {
+  console.log(id);
+  fetch("https://reddit.com/"+id.slice(1)+".json").then((raw) => {
+    return raw.json();
+  }).then((data) => {
+    console.log(data);
+  });
 }
 function load(type) {
   var res = [];
-  fetch("https://api.pushshift.io/reddit/search/submission/?subreddit=forhire&filter=link_flair_text,created_utc,title,author,selftext&sort=desc&size=500").then((raw) => {
+  fetch("https://api.pushshift.io/reddit/search/submission/?subreddit=forhire&filter=link_flair_text,created_utc,title,author,id,selftext&sort=desc&size=500").then((raw) => {
     return raw.json();
   }).then((data) => {
     var posts = data.data;
