@@ -48,16 +48,18 @@ function b(e) {
   draw(type);
 }
 function draw(type) {
+  var html = "";
   document.querySelector(".posts").innerHTML = "";
   var posts = window.posts;
   for (var i = 0; i < posts.length; i++) {
     if (posts[i].link_flair_text == type) {
-      document.querySelector(".posts").innerHTML += "<div class='post' onclick='show("+i.toString()+")'>"+posts[i].title+" -&nbsp;"+posts[i].created_utc.replace(/ /g, "&nbsp;")+"</div>";
+      html += "<div class='post' onclick='show("+i.toString()+")'>"+posts[i].title+" -&nbsp;"+posts[i].created_utc.replace(/ /g, "&nbsp;")+"</div>";
       if (i%10 == 9) {
-        document.querySelector(".posts").innerHTML += "<iframe class='post' data-aa='770844' src='//acceptable.a-ads.com/770844' scrolling='no' style='border:0px; padding:0;overflow:hidden' allowtransparency='true'></iframe>";
+        html += "<iframe class='post' data-aa='770844' src='//acceptable.a-ads.com/770844' scrolling='no' style='border:0px; padding:0;overflow:hidden' allowtransparency='true'></iframe>";
       }
     }
   }
+  document.querySelector(".posts").innerHTML = html;
 }
 function show(index) {
   window.index = index;
