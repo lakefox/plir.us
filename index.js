@@ -72,12 +72,12 @@ function show(index) {
   document.querySelector(".view").style.display = "inherit";
   window.y = window.scrollY;
   window.scrollTo(0,0);
-  document.querySelector(".page").style.display = "none";
+  document.querySelector(".posts").style.display = "none";
 }
 function hide() {
   document.querySelector("title").innerHTML = "PLIRUS";
   document.querySelector(".view").style.display = "none";
-  document.querySelector(".page").style.display = "inherit";
+  document.querySelector(".posts").style.display = "inherit";
   window.scrollTo(0,window.y);
 }
 function message() {
