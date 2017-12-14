@@ -68,7 +68,7 @@ function show(index) {
   var html = converter.makeHtml(post.selftext);
   document.querySelector("title").innerHTML = post.title;
   document.querySelector(".viewTitle").innerHTML = post.title;
-  document.querySelector(".viewBody").innerHTML = html + "<a target='_blank' href='http://plir.us/#"+post.id+"'>Share</a>";
+  window.location.hash = post.id;
   document.querySelector(".view").style.display = "inherit";
   window.y = window.scrollY;
   window.scrollTo(0,0);
@@ -78,6 +78,7 @@ function hide() {
   document.querySelector("title").innerHTML = "PLIRUS";
   document.querySelector(".view").style.display = "none";
   document.querySelector(".posts").style.display = "inherit";
+  window.location.hash = "";
   window.scrollTo(0,window.y);
 }
 function message() {
