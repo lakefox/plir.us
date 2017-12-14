@@ -3,7 +3,6 @@ html, body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  overflow-y: hidden;
 }
 .body {
   width: 100vw;
@@ -23,11 +22,6 @@ html, body {
   color: #222;
   border: 5px solid #111;
   padding-left: 10px;
-}
-.page {
-  width: 100vw;
-  min-height: 100vh;
-  background: #111;
 }
 .button {
   width: 175px;
@@ -57,11 +51,12 @@ html, body {
 }
 .posts {
   position: absolute;
-  top: 100vh;
+  top: calc(100vh - 100px);
   left: 0;
   width: 100%;
+  padding-top: 50px;
   background: #111;
-  padding-bottom: 10%;
+  padding-bottom: 50px;
 }
 .post {
   font-family: 'Oswald', sans-serif;
