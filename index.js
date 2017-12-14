@@ -68,6 +68,7 @@ function show(index) {
   var html = converter.makeHtml(post.selftext);
   document.querySelector("title").innerHTML = post.title;
   document.querySelector(".viewTitle").innerHTML = post.title;
+  document.querySelector(".viewBody").innerHTML = html;
   window.location.hash = post.id;
   document.querySelector(".view").style.display = "inherit";
   window.y = window.scrollY;
